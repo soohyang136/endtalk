@@ -9,6 +9,11 @@ export default function Word(){
     const [word, setWord] = useState('');
     const [count, setCount] = useState(0);
     let definition = '';
+    let timer = setTimeout(() => {
+        alert("시간초과");
+        window.location.replace("/");
+    }, 10000);
+    clearTimeout(timer);
     function OnClick(){
         let flag = true;
         if(apro === 0 || data[apro-1].wording[data[apro-1].wording.length - 1] === word[0]) {
@@ -22,8 +27,7 @@ export default function Word(){
                     const url = "/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q="+ word +"&sort=dict&start=1&num=10";
                     const response = await axios.get(url, );
                     if(response.data.channel.total !== '0') {
-                        console.log(response);
-                        setCount(count+1);
+                        setCount(0);
                         definition = response.data.channel.item[0].sense[0].definition;
                         data[apro] = {
                             wording: word,
@@ -33,23 +37,47 @@ export default function Word(){
                     }
                     else {
                         alert("없는 단어 입니다.");
-                        window.location.replace("/");
-                        setCount(0);
+                        setCount(count+1);
+                        if(count >= 5){
+                            setCount(0)
+                            alert("5번 이상 틀리셨습니다.");
+                            window.location.replace("/");
+                        }
+                        
                     }
                 }
                 if(flag) {
                     search();
                 }
-                else alert("사용했던 단어입니다.");
+                else {
+                    alert("사용했던 단어입니다.");
+                    setCount(count+1);
+                    if(count >= 5){
+                        setCount(0)
+                        alert("5번 이상 틀리셨습니다.");
+                        window.location.replace("/");
+                    }
+                }
             }
             else{
                 alert("단어는 한글자 이상이여야 합니다!");
+                setCount(count+1);
+                if(count >= 5){
+                    setCount(0)
+                    alert("5번 이상 틀리셨습니다.");
+                    window.location.replace("/");
+                }
             }
             
         }
         else {
             alert("실패");
-            window.location.replace("/");
+            setCount(count+1);
+            if(count >= 5){
+                setCount(0);
+                alert("5번 이상 틀리셨습니다.");
+                window.location.replace("/")
+            }
         }
         setWord('')
     };
