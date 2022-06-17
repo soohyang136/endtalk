@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import '../App.css';
 import axios from 'axios';
-import Print from "./Print";
+import Print from './Print.js'
 
 let apro = 0;
-let data = [];
 let count = 0;
+let tem = [];
 export default function Word(){
     const [word, setWord] = useState('');
+    const [data, setData] = useState([]);
     let definition = '';
     async function search (){
         const url = "/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q="+ word +"&sort=dict&start=1&num=10";
@@ -15,11 +16,14 @@ export default function Word(){
         if(response.data.channel.total !== '0') {
             count = 0;
             definition = response.data.channel.item[0].sense[0].definition;
-            data[apro] = {
+            tem[apro] = {
                 wording: word,
                 define: definition,
             };
+            setData(tem);
             apro += 1;
+            console.log(data);
+            console.log(count);
         }
         else {
             alert("없는 단어 입니다.");
@@ -44,9 +48,6 @@ export default function Word(){
                 }
                 if(flag) {
                     search();
-                    console.log(data);
-                    setWord('');
-                    
                 }
                 else {
                     alert("사용했던 단어입니다.");
@@ -78,6 +79,7 @@ export default function Word(){
                 window.location.replace("/")
             }
         }
+        setWord((prev) => prev[prev.length - 1]);
     };
     function OnChange(e){
         setWord(e.target.value);    
@@ -93,10 +95,12 @@ export default function Word(){
         <div className="wordchain" onKeyPress={onKeyPress}>
             <input type="text" placeholder="단어입력" value={word} onChange={OnChange}/>
             <button onClick={OnClick}>제출</button>
-            {data.slice(0).reverse().map( (p, index) => {
-                return <Print wording = {p.wording} define = {p.define} index={index} key={index} />
-            })
-            }
+            <div>
+                 {data.slice(0).reverse().map( (p, index) => {
+                    return <Print wording = {p.wording} define = {p.define} index={index} key={index} />
+                })
+                }
+            </div>
         </div>
     )
 }

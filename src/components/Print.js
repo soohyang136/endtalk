@@ -2,10 +2,10 @@ import React from "react";
 import '../App.css';
 
 export default function Print(props){
-    return(
+    return (
         <>
-            <h2><p key={props.index + 2}>{props.wording}</p></h2>
-            <h4><p key={props.index + 1} >{props.define}</p></h4>       
+            <h2 key={props.index+1}>{props.wording}</h2>
+            <h4 key={props.index+2}>{props.define}</h4>
         </>
-    );
+    )
 }
