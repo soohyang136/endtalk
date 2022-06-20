@@ -1,109 +1,64 @@
+import axios from "axios";
 import React, { useState } from "react";
 import '../App.css';
-import axios from 'axios';
-import Print from './Print.js'
+import Print from './Print';
 
 let apro = 0;
-let count = 0;
 let tem = [];
-export default function Word(){
+export default function Word(){    
     const [word, setWord] = useState('');
     const [data, setData] = useState([]);
-    let definition = '';
-    async function search (){
-        const url = "/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q="+ word +"&sort=dict&start=1&num=10";
+    async function search(subword){
+        const url = "/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q="+ subword +"&sort=dict&start=1&num=10";
         const response = await axios.get(url, )
         if(response.data.channel.total !== '0') {
-            count = 0;
-            definition = response.data.channel.item[0].sense[0].definition;
             tem[apro] = {
-                wording: word,
-                define: definition,
+                wording: subword,
+                define: response.data.channel.item[0].sense[0].definition
             };
-            setData(tem);
+            setData(tem.reverse());
             apro += 1;
-            console.log(data);
-            console.log(count);
         }
-        else {
-            alert("없는 단어 입니다.");
-            count += 1;
-            if(count >= 5){
-                count = 0;
-                alert("5번 이상 틀리셨습니다.");
-                window.location.replace("/");
-            }
-            
+        else{
+            alert("실패");
+            window.location.replace("/");
         }
     }
-    function OnClick(){
-        let flag = true;
-        if(apro === 0 || data[apro-1].wording[data[apro-1].wording.length - 1] === word[0]) {
-            if(word.length > 1){
-                for(let i = 0; i < data.length; i++){
-                    if(word === data[i].wording){
-                        flag = false;
-                        break;
-                    }
-                }
-                if(flag) {
-                    search();
-                }
-                else {
-                    alert("사용했던 단어입니다.");
-                    count += 1;
-                    if(count >= 5){
-                        count = 0;
-                        alert("5번 이상 틀리셨습니다.");
-                        window.location.replace("/");
-                    }
-                }
-            }
-            else{
-                alert("단어는 두글자 이상이여야 합니다!");
-                count += 1;
-                if(count >= 5){
-                    count = 0;
-                    alert("5번 이상 틀리셨습니다.");
+    function Onchange(e){
+        setWord(e.target.value);
+    }
+
+    function Onclick(){
+        if(apro === 0 || data[apro-1].wording[data[apro-1].wording.length - 1] === word[0] || word.length > 1) {
+            for(let i = 0; i < data.length; i++){
+                if(word === data[i].wording){
+                    alert("실패");
                     window.location.replace("/");
                 }
             }
-            
+            search(word);
         }
-        else {
+        else{
             alert("실패");
-            count +=1;
-            if(count >= 5){
-                count = 0;
-                alert("5번 이상 틀리셨습니다.");
-                window.location.replace("/")
-            }
+            window.location.replace("/");
         }
-        setWord((prev) => prev[prev.length - 1]);
-    };
-    function OnChange(e){
-        setWord(e.target.value);    
-    };
+        setWord("");
+    }
 
-    function onKeyPress(e){
+    function OnEnter(e){
         if(e.key === "Enter") {
-            OnClick();
+            Onclick();
         }
     }
 
     return(
-        <div className="wordchain" onKeyPress={onKeyPress}>
-            <input type="text" placeholder="단어입력" value={word} onChange={OnChange}/>
-            <button onClick={OnClick}>제출</button>
-            <div>
-                 {data.slice(0).reverse().map( (p, index) => {
-                    return <Print wording = {p.wording} define = {p.define} index={index} key={index} />
-                })
-                }
-            </div>
+        <div onKeyPress={OnEnter} className="wordchain">
+            <input value={word} onChange={Onchange} placeholder="단어입력" />
+            <button onClick={Onclick}>제출</button>
+            {data.map((p, index) =>{
+                return <Print wording = {p.wording} define = {p.define} index={index} key={index} />
+            })
+            }
         </div>
     )
 }
-
-
-
