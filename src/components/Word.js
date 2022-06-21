@@ -1,20 +1,19 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import '../App.css';
 
 export default function Word(){    
     const [word, setWord] = useState([]);
     const [print, setPrint] = useState([]);
+    const inputRef = useRef(null);
 
     function rem(arr){
-        console.log('called');
         arr.pop();
         console.log(arr);
         return arr;
     }
 
     useEffect(() => {
-        console.log("entered");
          async function fetchData(){
             const response = await axios.get("/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q="+ word[word.length - 1] +"&sort=dict&start=1&num=10", )
             if(response.data.channel.total === '0') {
@@ -30,6 +29,7 @@ export default function Word(){
          if(word.length !== 0){
             fetchData();
          }
+         inputRef.current.value = "";
     }, [word]);
 
     function Onclick(e){
@@ -55,7 +55,7 @@ export default function Word(){
     }
     return(
         <div onKeyPress={OnEnter} className="wordchain">
-            <input placeholder="단어입력" />
+            <input ref={inputRef} placeholder="단어입력" />
             <button onClick={Onclick}>제출</button>
             {print.map((w, index) => {
                 return (
