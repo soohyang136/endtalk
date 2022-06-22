@@ -5,11 +5,13 @@ import Precautions from './components/Precautions';
 
 function App() {
   return (
-    <>
-    <Header />
-    <Precautions />
-    <Word />
-    </>
+    <div className='container'>
+      <Header />
+      <div className='contents'>
+        <Precautions />
+        <Word />
+      </div>
+    </div>
   );
 
 }

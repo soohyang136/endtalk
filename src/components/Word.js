@@ -57,6 +57,7 @@ export default function Word(){
                 }
             }
             else{
+                inputRef.current.value = "";   
                 alert("실패");
             }
         }
@@ -74,8 +75,8 @@ export default function Word(){
             {print.map((w, index) => {
                 return (
                     <>
-                        <h2>{w.wording}</h2>
-                        <h4>{w.define}</h4>
+                        <h2 key={index}>{w.wording}</h2>
+                        <h4 key={index + 1}>{w.define}</h4>
                     </>
                 )
             })
