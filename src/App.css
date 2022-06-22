@@ -1,9 +1,10 @@
-html{
-  width: 100%;
+.wordchain{
+  display: flex;
+  align-items: center;
 }
 
-.container{
-  width: 100%;
+h4{
+  width: 400px;
 }
 
 #root{

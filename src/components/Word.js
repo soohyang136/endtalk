@@ -69,9 +69,12 @@ export default function Word(){
         }
     }
     return(
-        <div onKeyPress={OnEnter} className="wordchain">
-            <input ref={inputRef} placeholder="단어입력" />
-            <button onClick={Onclick}>제출</button>
+        <div onKeyPress={OnEnter}>
+            <div className='submit'>
+                <input ref={inputRef} placeholder="단어입력" />
+                <button onClick={Onclick}>제출</button>
+            </div>
+            <div className='print'>
             {print.map((w, index) => {
                 return (
                     <>
@@ -81,6 +84,7 @@ export default function Word(){
                 )
             })
             }
+            </div>
         </div>
     )
 }
