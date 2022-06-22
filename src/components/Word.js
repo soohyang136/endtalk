@@ -15,7 +15,7 @@ export default function Word(){
 
     useEffect(() => {
          async function fetchData(){
-            const response = await axios.get("/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q="+ word[word.length - 1] +"&sort=dict&start=1&num=10", )
+            const response = await axios.get("/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q="+ word[word.length - 1] +"&sort=dict&start=1&num=10&advanced=y&pos=1", )
             if(response.data.channel.total === '0') {
                 const arr = rem(word);
                 setWord(prev => arr);
@@ -30,6 +30,7 @@ export default function Word(){
             fetchData();
          }
          inputRef.current.value = "";
+        
     }, [word]);
 
     function Onclick(e){
@@ -40,7 +41,20 @@ export default function Word(){
             const lastword = word[word.length - 1];
             const lastspelling = lastword.slice(-1)[0];
             if(lastspelling === e.target.value[0]){
-                setWord(prev => [...prev, e.target.value]);
+                let flag = true;
+                for(let i = 0; i < word.length; i++){
+                    if(word[i] === e.target.value){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag){
+                    setWord(prev => [...prev, e.target.value]);
+                }
+                else{
+                    inputRef.current.value = "";
+                    alert("사용한 단어");
+                }
             }
             else{
                 alert("실패");
