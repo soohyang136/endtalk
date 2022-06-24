@@ -16,7 +16,8 @@ export default function Word(){
     useEffect(() => {
          async function fetchData(){
             const response = await axios.get("/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q="+ word[word.length - 1] +"&sort=dict&start=1&num=10&advanced=y&pos=1", )
-            if(response.data.channel.total === '0') {
+            console.log(response.error);
+            if(response.data.channel.total === 0) {
                 const arr = rem(word);
                 setWord(prev => arr);
                 alert("없는 단어");
@@ -69,22 +70,22 @@ export default function Word(){
         }
     }
     return(
-        <div onKeyPress={OnEnter}>
-            <div className='submit'>
-                <input ref={inputRef} placeholder="단어입력" />
-                <button onClick={Onclick}>제출</button>
+        <>
+            <div onKeyPress={OnEnter}>
+                <div className='submit'>
+                    <input ref={inputRef} placeholder="단어입력" />
+                    <button onClick={Onclick}>제출</button>
+                </div>
+                {print.map((w, index) => {
+                    return (
+                        <div className='print'>
+                            <h2 key={index}>{w.wording}</h2>
+                            <h4 key={index}>{w.define}</h4>
+                        </div>
+                    )
+                })
+                }
             </div>
-            <div className='print'>
-            {print.map((w, index) => {
-                return (
-                    <>
-                        <h2 key={index}>{w.wording}</h2>
-                        <h4 key={index + 1}>{w.define}</h4>
-                    </>
-                )
-            })
-            }
-            </div>
-        </div>
+        </>
     )
 }
