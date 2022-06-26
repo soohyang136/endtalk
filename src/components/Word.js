@@ -6,6 +6,7 @@ export default function Word(){
     const [word, setWord] = useState([]);
     const [print, setPrint] = useState([]);
     const inputRef = useRef(null);
+    const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
     function rem(arr){
         arr.pop();
         return arr;
@@ -13,7 +14,7 @@ export default function Word(){
 
     useEffect(() => {
          async function fetchData(){
-            const response = await axios.get("/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q="+ word[word.length - 1] +"&sort=dict&start=1&num=10&advanced=y&pos=1", )
+            const response = await axios.get(`${PROXY}/api/search?certkey_no=3972&key=60C5985FAD0CE908A6FE289E8D2801F4&target_type=search&req_type=json&part=word&q=`+ word[word.length - 1] + "&sort=dict&start=1&num=10&advanced=y&pos=1", )
             if(response.data.channel.total === 0) {
                 const arr = rem(word);
                 setWord(prev => arr);
