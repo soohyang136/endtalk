@@ -1,5 +1,7 @@
 [[redirects]]
-from = "/proxy/*"
+  from = "/proxy/*"
   to = "https://opendict.korean.go.kr/:splat"  
   status = 200
   force = true
+  headers = {X-From = "Netlify"}
+
