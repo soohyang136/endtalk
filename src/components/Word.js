@@ -6,7 +6,6 @@ export default function Word(){
     const [word, setWord] = useState([]);
     const [print, setPrint] = useState([]);
     const inputRef = useRef(null);
-    console.log(PROXY);
     function rem(arr){
         arr.pop();
         return arr;
