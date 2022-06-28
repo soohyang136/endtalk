@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Precautions from './components/Precautions';
 
 function App() {
+  
   return (
     <div className='container'>
       <Header />
